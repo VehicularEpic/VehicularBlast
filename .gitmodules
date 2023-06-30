@@ -6,3 +6,7 @@
 	path = glfw
 	url = https://github.com/glfw/glfw.git
 	branch = 3.3.8
+[submodule "cgltf/cgltf"]
+	path = cgltf/cgltf
+	url = https://github.com/jkuhlmann/cgltf.git
+	branch = v1.13
