@@ -10,6 +10,10 @@ static void ErrorCallback(int error, const char *description) {
     fprintf(stderr, "GLFW Error: %s (%d)\n", description, error);
 }
 
+static void framebuffer_size_callback(GLFWwindow *window, int w, int h) {
+    glViewport(0, 0, w, h);
+}
+
 namespace veb {
 
     Window::Window(const std::string &name) {
@@ -42,7 +46,11 @@ namespace veb {
 
         glfwSetInputMode(static_cast<GLFWwindow *>(handle), GLFW_LOCK_KEY_MODS, GLFW_TRUE);
         glfwMakeContextCurrent(static_cast<GLFWwindow *>(handle));
+
         gladLoadGL(glfwGetProcAddress);
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+
+        glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(handle), framebuffer_size_callback);
 
         glfwShowWindow(static_cast<GLFWwindow *>(handle));
     }
@@ -75,6 +83,14 @@ namespace veb {
 
     bool Window::IsActive() const {
         return !glfwWindowShouldClose(static_cast<GLFWwindow *>(handle));
+    }
+
+    double Window::GetTime() const {
+        return glfwGetTime();
+    }
+
+    void Window::Clear() const {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void Window::Update() const {

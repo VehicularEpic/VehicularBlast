@@ -19,6 +19,9 @@ namespace veb {
         void SetHeight(int height);
 
         bool IsActive() const;
+        double GetTime() const;
+
+        void Clear() const;
         void Update() const;
     };
 
