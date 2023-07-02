@@ -16,5 +16,10 @@ set(GLFW_BUILD_EXAMPLES OFF)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/glfw)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/cgltf)
 
+set(DRACO_GLTF_BITSTREAM ON CACHE BOOL "" FORCE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/draco)
+get_target_property(DRACO_INCLUDE_DIRECTORIES draco INCLUDE_DIRECTORIES)
+
 add_executable(VehicularBlast src/main.cpp ${VEHICULAR_BLAST_SOURCES})
-target_link_libraries(VehicularBlast glm glad glfw cgltf)
+target_link_libraries(VehicularBlast glm glad glfw cgltf draco)
+target_include_directories(VehicularBlast PRIVATE ${DRACO_INCLUDE_DIRECTORIES})
