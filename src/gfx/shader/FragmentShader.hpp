@@ -4,6 +4,6 @@
 
 namespace veb {
 
-    using FragmentShader = Shader<ShaderType::Fragment>;
+using FragmentShader = Shader<ShaderType::Fragment>;
 
-}// namespace veb
+} // namespace veb

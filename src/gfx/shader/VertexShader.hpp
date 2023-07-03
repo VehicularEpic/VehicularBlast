@@ -4,6 +4,6 @@
 
 namespace veb {
 
-    using VertexShader = Shader<ShaderType::Vertex>;
+using VertexShader = Shader<ShaderType::Vertex>;
 
-}// namespace veb
+} // namespace veb

@@ -16,86 +16,86 @@ static void framebuffer_size_callback(GLFWwindow *window, int w, int h) {
 
 namespace veb {
 
-    Window::Window(const std::string &name) {
-        glfwSetErrorCallback(ErrorCallback);
+Window::Window(const std::string &name) {
+    glfwSetErrorCallback(ErrorCallback);
 
-        if (!glfwInit())
-            exit(EXIT_FAILURE);
+    if (!glfwInit())
+        exit(EXIT_FAILURE);
 
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwDefaultWindowHints();
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 #if defined(OS_MAC)
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
 
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        handle = glfwCreateWindow(800, 600, name.c_str(), nullptr, nullptr);
+    handle = glfwCreateWindow(800, 600, name.c_str(), nullptr, nullptr);
 
-        if (!handle) {
-            glfwTerminate();
-            exit(EXIT_FAILURE);
-        }
-
-        glfwSetInputMode(static_cast<GLFWwindow *>(handle), GLFW_LOCK_KEY_MODS, GLFW_TRUE);
-        glfwMakeContextCurrent(static_cast<GLFWwindow *>(handle));
-
-        gladLoadGL(glfwGetProcAddress);
-        glClearColor(0.f, 0.f, 0.f, 1.f);
-
-        glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(handle), framebuffer_size_callback);
-
-        glfwShowWindow(static_cast<GLFWwindow *>(handle));
+    if (!handle) {
+        glfwTerminate();
+        exit(EXIT_FAILURE);
     }
 
-    Window::~Window() {
-        glfwDestroyWindow(static_cast<GLFWwindow *>(handle));
-    }
+    glfwSetInputMode(static_cast<GLFWwindow *>(handle), GLFW_LOCK_KEY_MODS, GLFW_TRUE);
+    glfwMakeContextCurrent(static_cast<GLFWwindow *>(handle));
 
-    int Window::GetWidth() const {
-        int width = 0;
-        glfwGetWindowSize(static_cast<GLFWwindow *>(handle), &width, NULL);
+    gladLoadGL(glfwGetProcAddress);
+    glClearColor(0.f, 0.f, 0.f, 1.f);
 
-        return width;
-    }
+    glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(handle), framebuffer_size_callback);
 
-    void Window::SetWidth(int width) {
-        glfwSetWindowSize(static_cast<GLFWwindow *>(handle), width, GetHeight());
-    }
+    glfwShowWindow(static_cast<GLFWwindow *>(handle));
+}
 
-    int Window::GetHeight() const {
-        int height = 0;
-        glfwGetWindowSize(static_cast<GLFWwindow *>(handle), NULL, &height);
+Window::~Window() {
+    glfwDestroyWindow(static_cast<GLFWwindow *>(handle));
+}
 
-        return height;
-    }
+int Window::GetWidth() const {
+    int width = 0;
+    glfwGetWindowSize(static_cast<GLFWwindow *>(handle), &width, NULL);
 
-    void Window::SetHeight(int height) {
-        glfwSetWindowSize(static_cast<GLFWwindow *>(handle), GetWidth(), height);
-    }
+    return width;
+}
 
-    bool Window::IsActive() const {
-        return !glfwWindowShouldClose(static_cast<GLFWwindow *>(handle));
-    }
+void Window::SetWidth(int width) {
+    glfwSetWindowSize(static_cast<GLFWwindow *>(handle), width, GetHeight());
+}
 
-    double Window::GetTime() const {
-        return glfwGetTime();
-    }
+int Window::GetHeight() const {
+    int height = 0;
+    glfwGetWindowSize(static_cast<GLFWwindow *>(handle), NULL, &height);
 
-    void Window::Clear() const {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
+    return height;
+}
 
-    void Window::Update() const {
-        glfwSwapBuffers(static_cast<GLFWwindow *>(handle));
-        glfwPollEvents();
-    }
+void Window::SetHeight(int height) {
+    glfwSetWindowSize(static_cast<GLFWwindow *>(handle), GetWidth(), height);
+}
 
-}// namespace veb
+bool Window::IsActive() const {
+    return !glfwWindowShouldClose(static_cast<GLFWwindow *>(handle));
+}
+
+double Window::GetTime() const {
+    return glfwGetTime();
+}
+
+void Window::Clear() const {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Window::Update() const {
+    glfwSwapBuffers(static_cast<GLFWwindow *>(handle));
+    glfwPollEvents();
+}
+
+} // namespace veb

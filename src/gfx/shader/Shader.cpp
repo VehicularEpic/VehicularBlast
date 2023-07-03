@@ -41,42 +41,42 @@ static GLenum GetGLShaderType(veb::ShaderType type) {
 
 namespace veb {
 
-    template<ShaderType _Ty>
-    Shader<_Ty>::Shader(std::string source) {
-        shader = glCreateShader(GetGLShaderType(_Ty));
+template<ShaderType _Ty>
+Shader<_Ty>::Shader(std::string source) {
+    shader = glCreateShader(GetGLShaderType(_Ty));
 
-        const char *data = source.c_str();
-        const GLint length = source.length();
-        glShaderSource(shader, 1, &data, &length);
+    const char *data = source.c_str();
+    const GLint length = source.length();
+    glShaderSource(shader, 1, &data, &length);
 
-        if (!CompileShader(shader)) {
-            glDeleteShader(shader);
-            shader = 0;
-        }
-    }
-
-    template<ShaderType _Ty>
-    Shader<_Ty>::~Shader() {
+    if (!CompileShader(shader)) {
         glDeleteShader(shader);
+        shader = 0;
     }
+}
 
-    template<ShaderType _Ty>
-    Shader<_Ty>::Shader(Shader<_Ty> &&s) noexcept
-        : shader(s.shader) {
-        s.shader = 0;
-    }
+template<ShaderType _Ty>
+Shader<_Ty>::~Shader() {
+    glDeleteShader(shader);
+}
 
-    template<ShaderType _Ty>
-    void Shader<_Ty>::Attach(uint32_t program) const {
-        glAttachShader(program, shader);
-    }
+template<ShaderType _Ty>
+Shader<_Ty>::Shader(Shader<_Ty> &&s) noexcept
+    : shader(s.shader) {
+    s.shader = 0;
+}
 
-    template<ShaderType _Ty>
-    void Shader<_Ty>::Detach(uint32_t program) const {
-        glDetachShader(program, shader);
-    }
+template<ShaderType _Ty>
+void Shader<_Ty>::Attach(uint32_t program) const {
+    glAttachShader(program, shader);
+}
 
-    template class Shader<ShaderType::Vertex>;
-    template class Shader<ShaderType::Fragment>;
+template<ShaderType _Ty>
+void Shader<_Ty>::Detach(uint32_t program) const {
+    glDetachShader(program, shader);
+}
 
-}// namespace veb
+template class Shader<ShaderType::Vertex>;
+template class Shader<ShaderType::Fragment>;
+
+} // namespace veb
