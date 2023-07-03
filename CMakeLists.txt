@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.0)
 project(VehicularBlast)
 
 set(VEHICULAR_BLAST_SOURCES
+    src/gfx/Mesh.cpp
     src/gfx/shader/Shader.cpp
     src/gfx/shader/ShaderProgram.cpp
     src/gui/Window.cpp
+    src/io/MeshFile.cpp
 )
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/glm)
