@@ -23,5 +23,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/draco)
 get_target_property(DRACO_INCLUDE_DIRECTORIES draco INCLUDE_DIRECTORIES)
 
 add_executable(VehicularBlast src/main.cpp ${VEHICULAR_BLAST_SOURCES})
+set_target_properties(VehicularBlast PROPERTIES C_STANDARD 11 CXX_STANDARD 11)
+
 target_link_libraries(VehicularBlast glm glad glfw cgltf draco)
 target_include_directories(VehicularBlast PRIVATE ${DRACO_INCLUDE_DIRECTORIES})
