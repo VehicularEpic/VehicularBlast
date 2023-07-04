@@ -10,11 +10,16 @@ static void ErrorCallback(int error, const char *description) {
     fprintf(stderr, "GLFW Error: %s (%d)\n", description, error);
 }
 
-static void framebuffer_size_callback(GLFWwindow *window, int w, int h) {
-    glViewport(0, 0, w, h);
-}
-
 namespace veb {
+
+template<>
+void Window::FramebufferSizeCallback(GLFWwindow *window, int w, int h) {
+    glViewport(0, 0, w, h);
+
+    auto instance = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    for (const FramebufferSizeCallbackFn &listener : instance->framebufferSizeListeners)
+        listener(w, h);
+}
 
 Window::Window(const std::string &name) {
     glfwSetErrorCallback(ErrorCallback);
@@ -44,14 +49,15 @@ Window::Window(const std::string &name) {
         exit(EXIT_FAILURE);
     }
 
+    glfwSetWindowUserPointer(static_cast<GLFWwindow *>(handle), this);
     glfwSetInputMode(static_cast<GLFWwindow *>(handle), GLFW_LOCK_KEY_MODS, GLFW_TRUE);
     glfwMakeContextCurrent(static_cast<GLFWwindow *>(handle));
 
     gladLoadGL(glfwGetProcAddress);
     glClearColor(0.f, 0.f, 0.f, 1.f);
+    glViewport(0, 0, 800, 600);
 
-    glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(handle), framebuffer_size_callback);
-
+    glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(handle), Window::FramebufferSizeCallback);
     glfwShowWindow(static_cast<GLFWwindow *>(handle));
 }
 
