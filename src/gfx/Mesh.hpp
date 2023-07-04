@@ -18,7 +18,7 @@ public:
     Mesh(const Mesh &mesh) = delete;
     Mesh(Mesh &&mesh) noexcept;
 
-    void Render();
+    void Render() const;
 };
 
 } // namespace veb

@@ -59,7 +59,7 @@ Mesh::Mesh(Mesh &&mesh) noexcept
     mesh.count = 0;
 }
 
-void Mesh::Render() {
+void Mesh::Render() const {
     glBindVertexArray(object);
     glDrawArrays(GL_TRIANGLES, 0, count);
     glBindVertexArray(0);
