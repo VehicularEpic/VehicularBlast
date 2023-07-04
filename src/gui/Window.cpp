@@ -21,6 +21,13 @@ void Window::FramebufferSizeCallback(GLFWwindow *window, int w, int h) {
         listener(w, h);
 }
 
+template<>
+void Window::WindowSizeCallback(GLFWwindow *window, int w, int h) {
+    auto instance = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    instance->width = w;
+    instance->height = h;
+}
+
 Window::Window(const std::string &name) {
     glfwSetErrorCallback(ErrorCallback);
 
@@ -42,7 +49,7 @@ Window::Window(const std::string &name) {
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    handle = glfwCreateWindow(800, 600, name.c_str(), nullptr, nullptr);
+    handle = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 
     if (!handle) {
         glfwTerminate();
@@ -55,9 +62,11 @@ Window::Window(const std::string &name) {
 
     gladLoadGL(glfwGetProcAddress);
     glClearColor(0.f, 0.f, 0.f, 1.f);
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, width, height);
 
     glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(handle), Window::FramebufferSizeCallback);
+    glfwSetWindowSizeCallback(static_cast<GLFWwindow *>(handle), Window::WindowSizeCallback);
+
     glfwShowWindow(static_cast<GLFWwindow *>(handle));
 }
 
@@ -65,26 +74,14 @@ Window::~Window() {
     glfwDestroyWindow(static_cast<GLFWwindow *>(handle));
 }
 
-int Window::GetWidth() const {
-    int width = 0;
-    glfwGetWindowSize(static_cast<GLFWwindow *>(handle), &width, NULL);
-
-    return width;
+void Window::SetWidth(int w) {
+    width = w;
+    glfwSetWindowSize(static_cast<GLFWwindow *>(handle), width, height);
 }
 
-void Window::SetWidth(int width) {
-    glfwSetWindowSize(static_cast<GLFWwindow *>(handle), width, GetHeight());
-}
-
-int Window::GetHeight() const {
-    int height = 0;
-    glfwGetWindowSize(static_cast<GLFWwindow *>(handle), NULL, &height);
-
-    return height;
-}
-
-void Window::SetHeight(int height) {
-    glfwSetWindowSize(static_cast<GLFWwindow *>(handle), GetWidth(), height);
+void Window::SetHeight(int h) {
+    height = h;
+    glfwSetWindowSize(static_cast<GLFWwindow *>(handle), width, height);
 }
 
 bool Window::IsActive() const {

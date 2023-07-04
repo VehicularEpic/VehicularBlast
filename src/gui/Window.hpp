@@ -11,6 +11,9 @@ public:
     using FramebufferSizeCallbackFn = std::function<void(int, int)>;
 
 private:
+    uint32_t width = 800;
+    uint32_t height = 600;
+
     void *handle;
 
     std::vector<FramebufferSizeCallbackFn> framebufferSizeListeners;
@@ -18,14 +21,22 @@ private:
     template<typename T>
     static void FramebufferSizeCallback(T *window, int w, int h);
 
+    template<typename T>
+    static void WindowSizeCallback(T *window, int w, int h);
+
 public:
     Window(const std::string &name);
     ~Window();
 
-    int GetWidth() const;
-    void SetWidth(int width);
+    int GetWidth() const {
+        return width;
+    }
 
-    int GetHeight() const;
+    int GetHeight() const {
+        return height;
+    }
+
+    void SetWidth(int width);
     void SetHeight(int height);
 
     bool IsActive() const;
