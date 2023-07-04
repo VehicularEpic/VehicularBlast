@@ -6,6 +6,7 @@ set(VEHICULAR_BLAST_SOURCES
     src/gfx/shader/Shader.cpp
     src/gfx/shader/ShaderProgram.cpp
     src/gui/Window.cpp
+    src/io/MeshBank.cpp
     src/io/MeshFile.cpp
 )
 
