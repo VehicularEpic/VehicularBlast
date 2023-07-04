@@ -28,6 +28,16 @@ void Window::WindowSizeCallback(GLFWwindow *window, int w, int h) {
     instance->height = h;
 }
 
+template<>
+void Window::KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_REPEAT)
+        return;
+
+    auto instance = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    for (const KeyCallbackFn &callback : instance->keyListeners)
+        callback(key, action == GLFW_PRESS);
+}
+
 Window::Window(const std::string &name) {
     glfwSetErrorCallback(ErrorCallback);
 
@@ -66,6 +76,8 @@ Window::Window(const std::string &name) {
 
     glfwSetFramebufferSizeCallback(static_cast<GLFWwindow *>(handle), Window::FramebufferSizeCallback);
     glfwSetWindowSizeCallback(static_cast<GLFWwindow *>(handle), Window::WindowSizeCallback);
+
+    glfwSetKeyCallback(static_cast<GLFWwindow *>(handle), Window::KeyCallback);
 
     glfwShowWindow(static_cast<GLFWwindow *>(handle));
 }
