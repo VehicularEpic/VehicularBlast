@@ -18,8 +18,7 @@ static constexpr uint8_t Stride = (PositionElementCount + NormalElementCount + C
 
 namespace veb {
 
-Mesh::Mesh(const MeshFile &file) : count(file.GetTotalPoints()) {
-    auto data = file.GetData();
+Mesh::Mesh(std::vector<float> data, uint32_t count) : count(count) {
     if (data.empty())
         return;
 

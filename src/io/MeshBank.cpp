@@ -10,7 +10,7 @@ MeshBank::MeshBank(std::string baseDir) : baseDir(baseDir) {}
 
 void MeshBank::Load(const std::string &name) {
     veb::MeshFile file(baseDir + "/" + name + ".glb");
-    veb::Mesh mesh(file);
+    veb::Mesh mesh(file.GetData(), file.GetTotalPoints());
 
     meshes.emplace(std::make_pair(name, std::move(mesh)));
 }

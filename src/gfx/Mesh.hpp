@@ -1,8 +1,7 @@
 #pragma once
 
 #include <cstdint>
-
-#include "../io/MeshFile.hpp"
+#include <vector>
 
 namespace veb {
 
@@ -12,7 +11,7 @@ private:
     uint32_t count = 0;
 
 public:
-    Mesh(const MeshFile &file);
+    Mesh(std::vector<float> data, uint32_t count);
     ~Mesh();
 
     Mesh(const Mesh &mesh) = delete;
