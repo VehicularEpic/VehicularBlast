@@ -64,12 +64,12 @@ void ShaderProgram::Detach(const Shader<_Type> &shader) {
     shader.Detach(program);
 }
 
-void ShaderProgram::Vec3(std::string uniform, const glm::vec3 &vector) {
+void ShaderProgram::Vec3(std::string uniform, const glm::vec3 &vector) const {
     GLuint location = glGetUniformLocation(program, uniform.c_str());
     glUniform3fv(location, 1, glm::value_ptr(vector));
 }
 
-void ShaderProgram::Matrix4x4f(std::string uniform, const glm::mat4 &matrix) {
+void ShaderProgram::Matrix4x4f(std::string uniform, const glm::mat4 &matrix) const {
     GLuint location = glGetUniformLocation(program, uniform.c_str());
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }

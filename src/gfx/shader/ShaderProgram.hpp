@@ -31,8 +31,8 @@ public:
     template<ShaderType _Type>
     void Detach(const Shader<_Type> &shader);
 
-    void Vec3(std::string uniform, const glm::vec3 &vector);
-    void Matrix4x4f(std::string uniform, const glm::mat4 &matrix);
+    void Vec3(std::string uniform, const glm::vec3 &vector) const;
+    void Matrix4x4f(std::string uniform, const glm::mat4 &matrix) const;
 };
 
 } // namespace veb
