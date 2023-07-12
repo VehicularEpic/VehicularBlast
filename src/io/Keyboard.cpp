@@ -19,4 +19,13 @@ bool Keyboard::IsPressed(Key key) {
     return state != keys.end() && state->second;
 }
 
+bool Keyboard::Poll(Key key) {
+    bool isPressed = IsPressed(key);
+
+    if (isPressed)
+        keys[key] = false;
+
+    return isPressed;
+}
+
 } // namespace veb

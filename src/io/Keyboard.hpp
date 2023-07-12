@@ -87,6 +87,7 @@ public:
     ~Keyboard() = default;
 
     bool IsPressed(Key key);
+    bool Poll(Key key);
 };
 
 } // namespace veb
