@@ -3,6 +3,7 @@ project(VehicularBlast)
 
 set(VEHICULAR_BLAST_SOURCES
     src/engine/Entity.cpp
+    src/engine/Map.cpp
     src/gfx/Mesh.cpp
     src/gfx/shader/Shader.cpp
     src/gfx/shader/ShaderProgram.cpp
@@ -10,6 +11,7 @@ set(VEHICULAR_BLAST_SOURCES
     src/io/Keyboard.cpp
     src/io/MeshBank.cpp
     src/io/MeshFile.cpp
+    src/pbf/map_pbf.c
 )
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/glm)
