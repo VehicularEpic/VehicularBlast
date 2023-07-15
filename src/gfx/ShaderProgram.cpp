@@ -1,7 +1,4 @@
-#include "ShaderProgram.hpp"
-
-#include "FragmentShader.hpp"
-#include "VertexShader.hpp"
+#include "veb/gfx/ShaderProgram.hpp"
 
 #include <iostream>
 

@@ -5,8 +5,8 @@ set(VEHICULAR_BLAST_SOURCES
     src/engine/Entity.cpp
     src/engine/Map.cpp
     src/gfx/Mesh.cpp
-    src/gfx/shader/Shader.cpp
-    src/gfx/shader/ShaderProgram.cpp
+    src/gfx/Shader.cpp
+    src/gfx/ShaderProgram.cpp
     src/gui/Window.cpp
     src/io/Keyboard.cpp
     src/io/MeshBank.cpp
@@ -25,6 +25,6 @@ add_executable(VehicularBlast src/main.cpp ${VEHICULAR_BLAST_SOURCES})
 set_target_properties(VehicularBlast PROPERTIES C_STANDARD 11 CXX_STANDARD 11)
 
 get_target_property(DRACO_INCLUDE_DIRECTORIES draco INCLUDE_DIRECTORIES)
-target_include_directories(VehicularBlast PRIVATE ${DRACO_INCLUDE_DIRECTORIES})
+target_include_directories(VehicularBlast PRIVATE include ${DRACO_INCLUDE_DIRECTORIES})
 
 target_link_libraries(VehicularBlast glm glad glfw cgltf draco pbtools)

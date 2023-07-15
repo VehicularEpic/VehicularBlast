@@ -29,7 +29,7 @@
  */
 
 #include <limits.h>
-#include "map_pbf.h"
+#include "veb/pbf/map_pbf.h"
 
 #if CHAR_BIT != 8
 #    error "Number of bits in a char must be 8."

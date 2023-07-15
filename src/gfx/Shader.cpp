@@ -1,4 +1,4 @@
-#include "Shader.hpp"
+#include "veb/gfx/Shader.hpp"
 
 #include <cstring>
 #include <iostream>

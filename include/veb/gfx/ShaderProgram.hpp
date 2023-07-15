@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shader.hpp"
+#include "veb/gfx/Shader.hpp"
 
 #include <cstdint>
 #include <string>

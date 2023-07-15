@@ -1,4 +1,4 @@
-#include "Mesh.hpp"
+#include "veb/gfx/Mesh.hpp"
 
 #include <glad/gl.h>
 

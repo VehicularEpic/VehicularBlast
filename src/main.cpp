@@ -1,5 +1,5 @@
-#include "gui/Window.hpp"
-#include "io/MeshBank.hpp"
+#include "veb/gui/Window.hpp"
+#include "veb/io/MeshBank.hpp"
 
 #include <glad/gl.h>
 

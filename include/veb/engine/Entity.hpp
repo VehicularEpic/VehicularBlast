@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../gfx/Mesh.hpp"
+#include "veb/gfx/Mesh.hpp"
 
 #include <glm/mat4x4.hpp>
 

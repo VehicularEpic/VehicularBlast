@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../gui/Window.hpp"
+#include "veb/gui/Window.hpp"
 
 #include <cstdint>
 #include <map>

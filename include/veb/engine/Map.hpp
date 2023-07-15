@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.hpp"
-#include "../io/MeshBank.hpp"
+#include "veb/engine/Entity.hpp"
+#include "veb/io/MeshBank.hpp"
 
 #include <string>
 

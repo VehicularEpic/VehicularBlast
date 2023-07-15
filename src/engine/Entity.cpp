@@ -1,4 +1,4 @@
-#include "Entity.hpp"
+#include "veb/engine/Entity.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/gtx/quaternion.hpp>
