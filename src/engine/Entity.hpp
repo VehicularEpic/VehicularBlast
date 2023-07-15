@@ -26,6 +26,12 @@ public:
         mesh.Render();
     }
 
+    void Move(float px, float py, float pz) {
+        x += px;
+        y += py;
+        z += pz;
+    }
+
     void SetPosition(float px, float py, float pz) {
         x = px;
         y = py;
@@ -42,6 +48,12 @@ public:
 
     void SetZ(float pz) {
         z = pz;
+    }
+
+    void Rotate(float x, float y, float z) {
+        pitch += x;
+        yaw += y;
+        roll += z;
     }
 
     void SetRotation(float x, float y, float z) {
