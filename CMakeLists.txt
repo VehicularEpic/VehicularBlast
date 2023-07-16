@@ -4,7 +4,10 @@ project(VehicularBlast)
 set(VEHICULAR_BLAST_SOURCES
     src/engine/Entity.cpp
     src/engine/Game.cpp
+    src/engine/MainMenu.cpp
     src/engine/Map.cpp
+    src/engine/MapSelection.cpp
+    src/engine/VehicleSelection.cpp
     src/gfx/Mesh.cpp
     src/gfx/Shader.cpp
     src/gfx/ShaderProgram.cpp
