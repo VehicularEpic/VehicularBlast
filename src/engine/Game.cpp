@@ -59,6 +59,11 @@ Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/mod
     for (const char *name : models)
         meshBank.Load(name);
 
+    for (uint32_t i = 1; i <= 71; i++) {
+        std::string mapFile = "assets/maps/" + std::to_string(i) + ".pbf";
+        maps.push_back(Map(mapFile, meshBank));
+    }
+
     auto SetPerspective = [&](int width, int height) {
         glm::mat4 projection = glm::perspective(70.f, width / (float) height, 0.1f, 10000.f);
 
