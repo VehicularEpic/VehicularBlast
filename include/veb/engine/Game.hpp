@@ -55,6 +55,10 @@ public:
         shader.Matrix4x4f("view", matrix);
     }
 
+    void SetAmbientColor(glm::vec3 color) {
+        shader.Vec3("ambient", color);
+    }
+
     void Start() const;
 };
 
