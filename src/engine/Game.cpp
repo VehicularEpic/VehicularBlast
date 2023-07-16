@@ -23,31 +23,9 @@ static constexpr const char *models[] = {
 static constexpr const char *vehicles[] = {
         "drags", "destroy"};
 
-
-static veb::ShaderProgram CreateShader(std::string name) {
-    veb::ShaderProgram shader;
-
-    std::ifstream vs("assets/shaders/" + name + ".vs");
-    std::stringstream vertex_source;
-    vertex_source << vs.rdbuf();
-
-    std::ifstream fs("assets/shaders/" + name + ".fs");
-    std::stringstream fragment_source;
-    fragment_source << fs.rdbuf();
-
-    veb::VertexShader vertex(vertex_source.str());
-    shader.Attach(vertex);
-
-    veb::FragmentShader fragment(fragment_source.str());
-    shader.Attach(fragment);
-
-    shader.Link();
-    return std::move(shader);
-}
-
 namespace veb {
 
-Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/models"), shader(CreateShader("main")) {
+Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/models") {
     glEnable(GL_CULL_FACE);
 
     glEnable(GL_DEPTH_TEST);
@@ -67,17 +45,13 @@ Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/mod
     auto SetPerspective = [&](int width, int height) {
         glm::mat4 projection = glm::perspective(70.f, width / (float) height, 0.1f, 10000.f);
 
-        shader.Bind();
-        shader.Matrix4x4f("projection", projection);
-        shader.Unbind();
+        entityRenderer.Begin();
+        entityRenderer.SetProjectionMatrix(projection);
+        entityRenderer.End();
     };
 
     SetPerspective(window.GetWidth(), window.GetHeight());
     window.AddFramebufferSizeCallback(SetPerspective);
-
-    shader.Bind();
-    shader.Vec3("u_LightPos", glm::vec3(0.f, 100.f, -100.f));
-    shader.Unbind();
 }
 
 void Game::Start() const {
@@ -90,12 +64,8 @@ void Game::Start() const {
 
         window.Clear();
         if (!states.empty()) {
-            shader.Bind();
-
             auto &state = states.top();
             state->Run(delta);
-
-            shader.Unbind();
         }
 
         window.Update();

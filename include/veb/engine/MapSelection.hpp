@@ -1,6 +1,7 @@
 #pragma once
 
 #include "veb/engine/Entity.hpp"
+#include "veb/engine/EntityRenderer.hpp"
 #include "veb/engine/Map.hpp"
 #include "veb/engine/Game.hpp"
 #include "veb/engine/State.hpp"
@@ -14,6 +15,7 @@ class MapSelection : public virtual State {
 private:
     Game &game;
     Entity player;
+    const EntityRenderer &renderer;
     std::vector<Map>::const_iterator map_it;
 
     glm::mat4 view;
