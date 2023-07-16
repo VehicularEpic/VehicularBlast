@@ -155,6 +155,9 @@ void map_init(
 {
     self_p->base.heap_p = heap_p;
     self_p->name_p = "";
+    pbtools_bytes_init(&self_p->ambient_color);
+    pbtools_bytes_init(&self_p->sky_color);
+    pbtools_bytes_init(&self_p->ground_color);
     self_p->objects.length = 0;
     self_p->set.length = 0;
     self_p->fix.length = 0;
@@ -167,17 +170,20 @@ void map_encode_inner(
 {
     map_entity_encode_repeated_inner(
         encoder_p,
-        5,
+        8,
         &self_p->chk);
     map_entity_encode_repeated_inner(
         encoder_p,
-        4,
+        7,
         &self_p->fix);
     map_entity_encode_repeated_inner(
         encoder_p,
-        3,
+        6,
         &self_p->set);
-    pbtools_encoder_write_repeated_string(encoder_p, 2, &self_p->objects);
+    pbtools_encoder_write_repeated_string(encoder_p, 5, &self_p->objects);
+    pbtools_encoder_write_bytes(encoder_p, 4, &self_p->ground_color);
+    pbtools_encoder_write_bytes(encoder_p, 3, &self_p->sky_color);
+    pbtools_encoder_write_bytes(encoder_p, 2, &self_p->ambient_color);
     pbtools_encoder_write_string(encoder_p, 1, self_p->name_p);
 }
 
@@ -191,10 +197,10 @@ void map_decode_inner(
     struct pbtools_repeated_info_t repeated_info_fix;
     struct pbtools_repeated_info_t repeated_info_chk;
 
-    pbtools_repeated_info_init(&repeated_info_objects, 2);
-    pbtools_repeated_info_init(&repeated_info_set, 3);
-    pbtools_repeated_info_init(&repeated_info_fix, 4);
-    pbtools_repeated_info_init(&repeated_info_chk, 5);
+    pbtools_repeated_info_init(&repeated_info_objects, 5);
+    pbtools_repeated_info_init(&repeated_info_set, 6);
+    pbtools_repeated_info_init(&repeated_info_fix, 7);
+    pbtools_repeated_info_init(&repeated_info_chk, 8);
 
     while (pbtools_decoder_available(decoder_p)) {
         switch (pbtools_decoder_read_tag(decoder_p, &wire_type)) {
@@ -204,25 +210,37 @@ void map_decode_inner(
             break;
 
         case 2:
+            pbtools_decoder_read_bytes(decoder_p, wire_type, &self_p->ambient_color);
+            break;
+
+        case 3:
+            pbtools_decoder_read_bytes(decoder_p, wire_type, &self_p->sky_color);
+            break;
+
+        case 4:
+            pbtools_decoder_read_bytes(decoder_p, wire_type, &self_p->ground_color);
+            break;
+
+        case 5:
             pbtools_repeated_info_decode_string(
                 &repeated_info_objects,
                 decoder_p,
                 wire_type);
             break;
 
-        case 3:
+        case 6:
             pbtools_repeated_info_decode(&repeated_info_set,
                                          decoder_p,
                                          wire_type);
             break;
 
-        case 4:
+        case 7:
             pbtools_repeated_info_decode(&repeated_info_fix,
                                          decoder_p,
                                          wire_type);
             break;
 
-        case 5:
+        case 8:
             pbtools_repeated_info_decode(&repeated_info_chk,
                                          decoder_p,
                                          wire_type);

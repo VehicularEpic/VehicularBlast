@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message map {
+    string name = 1;
+    bytes ambient_color = 2 [packed=true];
+    bytes sky_color = 3 [packed=true];
+    bytes ground_color = 4 [packed=true];
+
+    repeated string objects = 5;
+
+    repeated entity set = 6;
+    repeated entity fix = 7;
+    repeated entity chk = 8;
+
+    message entity {
+        uint32 i = 1;
+
+        repeated float position = 2;
+        repeated float rotation = 3;
+    }
+}

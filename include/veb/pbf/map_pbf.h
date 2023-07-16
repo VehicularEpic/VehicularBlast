@@ -63,6 +63,9 @@ struct map_repeated_t {
 struct map_t {
     struct pbtools_message_base_t base;
     char *name_p;
+    struct pbtools_bytes_t ambient_color;
+    struct pbtools_bytes_t sky_color;
+    struct pbtools_bytes_t ground_color;
     struct pbtools_repeated_string_t objects;
     struct map_entity_repeated_t set;
     struct map_entity_repeated_t fix;
