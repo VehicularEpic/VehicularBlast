@@ -5,6 +5,7 @@
 #include "veb/engine/Map.hpp"
 #include "veb/engine/Game.hpp"
 #include "veb/engine/State.hpp"
+#include "veb/engine/World.hpp"
 
 #include <glm/mat4x4.hpp>
 
@@ -15,11 +16,10 @@ class MapSelection : public virtual State {
 private:
     Game &game;
     Entity player;
-    const EntityRenderer &renderer;
     std::vector<Map>::const_iterator map_it;
 
+    World world;
     glm::mat4 view;
-    std::vector<Entity> entities;
 
     void UpdateMap();
 

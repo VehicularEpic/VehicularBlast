@@ -9,6 +9,7 @@ set(VEHICULAR_BLAST_SOURCES
     src/engine/Map.cpp
     src/engine/MapSelection.cpp
     src/engine/VehicleSelection.cpp
+    src/engine/World.cpp
     src/gfx/Mesh.cpp
     src/gfx/Rect.cpp
     src/gfx/Shader.cpp

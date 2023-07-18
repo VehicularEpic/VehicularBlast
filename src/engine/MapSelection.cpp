@@ -5,7 +5,7 @@
 namespace veb {
 namespace state {
 
-MapSelection::MapSelection(Game &g, Entity p) : game(g), player(p), renderer(g.GetEntityRenderer()), map_it(g.GetMaps().begin()) {
+MapSelection::MapSelection(Game &g, Entity p) : game(g), player(p), map_it(g.GetMaps().begin()), world(g) {
     view = glm::lookAt(glm::vec3(0.f, 100.f, -30.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, -1.f, 0.f));
 
     player.SetPosition(0.f, 0.f, 0.f);
@@ -15,12 +15,15 @@ MapSelection::MapSelection(Game &g, Entity p) : game(g), player(p), renderer(g.G
 }
 
 void MapSelection::UpdateMap() {
-    renderer.SetAmbientColor(map_it->GetAmbientColor());
-    renderer.SetLightPosition(glm::vec3(0.f, 100.f, -100.f));
+    auto &entityRenderer = game.GetEntityRenderer();
+    entityRenderer.SetAmbientColor(map_it->GetAmbientColor());
+    entityRenderer.SetLightPosition(glm::vec3(0.f, 100.f, -100.f));
 
-    entities.clear();
+    world.Clear();
+    world.AddEntity(player);
+
     for (veb::Entity entity : map_it->GetEntities())
-        entities.push_back(entity);
+        world.AddEntity(entity);
 }
 
 void MapSelection::Run(double delta) {
@@ -45,15 +48,11 @@ void MapSelection::Run(double delta) {
     }
 
     view = glm::rotate(view, (float) delta, glm::vec3(0.f, 0.f, -1.f));
+
+    auto &renderer = game.GetEntityRenderer();
     renderer.SetViewMatrix(view);
 
-    renderer.SetModelMatrix(player.GetModelMatrix());
-    player.Render();
-
-    for (const veb::Entity &entity : entities) {
-        renderer.SetModelMatrix(entity.GetModelMatrix());
-        entity.Render();
-    }
+    world.Render();
 }
 
 } // namespace state
