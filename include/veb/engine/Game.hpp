@@ -53,8 +53,10 @@ public:
         states.push(std::move(state));
     }
 
-    void PopState() {
+    std::unique_ptr<State> PopState() {
+        auto state = std::move(states.top());
         states.pop();
+        return state;
     }
 
     void Start() const;
