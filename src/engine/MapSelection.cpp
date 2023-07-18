@@ -15,10 +15,8 @@ MapSelection::MapSelection(Game &g, Entity p) : game(g), player(p), renderer(g.G
 }
 
 void MapSelection::UpdateMap() {
-    renderer.Begin();
     renderer.SetAmbientColor(map_it->GetAmbientColor());
     renderer.SetLightPosition(glm::vec3(0.f, 100.f, -100.f));
-    renderer.End();
 
     entities.clear();
     for (veb::Entity entity : map_it->GetEntities())
@@ -46,7 +44,6 @@ void MapSelection::Run(double delta) {
         UpdateMap();
     }
 
-    renderer.Begin();
     view = glm::rotate(view, (float) delta, glm::vec3(0.f, 0.f, -1.f));
     renderer.SetViewMatrix(view);
 
@@ -57,8 +54,6 @@ void MapSelection::Run(double delta) {
         renderer.SetModelMatrix(entity.GetModelMatrix());
         entity.Render();
     }
-
-    renderer.End();
 }
 
 } // namespace state

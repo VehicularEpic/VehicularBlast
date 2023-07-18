@@ -45,9 +45,7 @@ Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/mod
     auto SetPerspective = [&](int width, int height) {
         glm::mat4 projection = glm::perspective(70.f, width / (float) height, 0.1f, 10000.f);
 
-        entityRenderer.Begin();
         entityRenderer.SetProjectionMatrix(projection);
-        entityRenderer.End();
     };
 
     SetPerspective(window.GetWidth(), window.GetHeight());
