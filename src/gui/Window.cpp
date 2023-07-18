@@ -14,6 +14,9 @@ namespace veb {
 
 template<>
 void Window::FramebufferSizeCallback(GLFWwindow *window, int w, int h) {
+    if (w <= 0 || h <= 0)
+        return;
+
     glViewport(0, 0, w, h);
 
     auto instance = static_cast<Window *>(glfwGetWindowUserPointer(window));
