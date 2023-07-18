@@ -58,14 +58,10 @@ EntityRenderer::EntityRenderer() {
     VertexShader vertexShader(vertex_shader_source);
     FragmentShader fragmentShader(fragment_shader_source);
 
-    shader.Attach(vertexShader);
-    shader.Attach(fragmentShader);
+    Attach(vertexShader);
+    Attach(fragmentShader);
 
-    shader.Link();
-}
-
-EntityRenderer::EntityRenderer(EntityRenderer &&e) noexcept
-    : shader(std::move(e.shader)) {
+    Link();
 }
 
 } // namespace veb
