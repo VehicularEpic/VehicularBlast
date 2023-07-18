@@ -46,6 +46,7 @@ Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/mod
         glm::mat4 projection = glm::perspective(70.f, width / (float) height, 0.1f, 10000.f);
 
         entityRenderer.SetProjectionMatrix(projection);
+        skyboxRenderer.SetProjectionMatrix(projection);
     };
 
     SetPerspective(window.GetWidth(), window.GetHeight());

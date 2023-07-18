@@ -2,6 +2,7 @@
 
 #include "veb/engine/EntityRenderer.hpp"
 #include "veb/engine/Map.hpp"
+#include "veb/engine/SkyboxRenderer.hpp"
 #include "veb/engine/State.hpp"
 #include "veb/gui/Window.hpp"
 #include "veb/io/Keyboard.hpp"
@@ -19,6 +20,7 @@ private:
     Keyboard keyboard;
     MeshBank meshBank;
     EntityRenderer entityRenderer;
+    SkyboxRenderer skyboxRenderer;
 
     std::vector<Map> maps;
     std::stack<std::unique_ptr<State>> states;
@@ -41,6 +43,10 @@ public:
 
     const EntityRenderer &GetEntityRenderer() const {
         return entityRenderer;
+    }
+
+    const SkyboxRenderer &GetSkyboxRenderer() const {
+        return skyboxRenderer;
     }
 
     void PushState(std::unique_ptr<State> state) {
