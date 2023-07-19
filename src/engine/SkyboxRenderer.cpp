@@ -68,8 +68,4 @@ SkyboxRenderer::SkyboxRenderer() {
     Link();
 }
 
-void SkyboxRenderer::SetViewMatrix(glm::mat4 matrix) const {
-    Matrix4x4f("view", glm::rotate(matrix, glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f)));
-}
-
 } // namespace veb

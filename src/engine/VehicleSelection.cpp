@@ -8,11 +8,11 @@ namespace veb {
 namespace state {
 
 VehicleSelection::VehicleSelection(Game &g) : game(g), entity(g.GetMeshBank().GetMesh("destroy")), renderer(g.GetEntityRenderer()) {
-    view = glm::lookAt(glm::vec3(0.f, 15.f, -4.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, -1.f, 0.f));
+    view = glm::lookAt(glm::vec3(0.f, 4.f, -15.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
 
     renderer.SetViewMatrix(view);
     renderer.SetAmbientColor(glm::vec3(1.f, 1.f, 1.f));
-    renderer.SetLightPosition(glm::vec3(0.f, 0.f, -100.f));
+    renderer.SetLightPosition(glm::vec3(0.f, 100.f, 0.f));
 }
 
 void VehicleSelection::Run(double delta) {

@@ -6,7 +6,7 @@ namespace veb {
 namespace state {
 
 MapSelection::MapSelection(Game &g, Entity p) : game(g), player(p), map_it(g.GetMaps().begin()), world(g) {
-    view = glm::lookAt(glm::vec3(0.f, 100.f, -20.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, -1.f, 0.f));
+    view = glm::lookAt(glm::vec3(0.f, 20.f, -100.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
 
     player.SetPosition(0.f, 0.f, 0.f);
     player.SetRotation(0.f, 0.f, 0.f);
@@ -17,7 +17,7 @@ MapSelection::MapSelection(Game &g, Entity p) : game(g), player(p), map_it(g.Get
 void MapSelection::UpdateMap() {
     auto &entityRenderer = game.GetEntityRenderer();
     entityRenderer.SetAmbientColor(map_it->GetAmbientColor());
-    entityRenderer.SetLightPosition(glm::vec3(0.f, 100.f, -100.f));
+    entityRenderer.SetLightPosition(glm::vec3(0.f, 100.f, 40.f));
 
     auto &skyboxRenderer = game.GetSkyboxRenderer();
     skyboxRenderer.SetAmbientColor(map_it->GetAmbientColor());
@@ -52,7 +52,7 @@ void MapSelection::Run(double delta) {
         UpdateMap();
     }
 
-    view = glm::rotate(view, (float) delta, glm::vec3(0.f, 0.f, -1.f));
+    view = glm::rotate(view, (float) delta, glm::vec3(0.f, -1.f, 0.f));
 
     auto &entityRenderer = game.GetEntityRenderer();
     entityRenderer.SetViewMatrix(view);
