@@ -1,14 +1,20 @@
 #include "veb/io/MeshFile.hpp"
 
 #include <cstdint>
+#include <fstream>
+#include <iostream>
 #include <map>
 #include <memory>
 #include <vector>
 
-#include <cgltf.h>
 #include <draco/mesh/mesh.h>
 #include <draco/core/decoder_buffer.h>
 #include <draco/compression/decode.h>
+
+#include <GLTFSDK/GLTF.h>
+#include <GLTFSDK/GLBResourceReader.h>
+#include <GLTFSDK/Deserialize.h>
+#include <GLTFSDK/RapidJsonUtils.h>
 
 /**
  * Decoding compressed data with draco (thanks to Blender :D)
@@ -40,68 +46,74 @@ public:
     }
 };
 
+class MeshStreamReader : public Microsoft::glTF::IStreamReader {
+public:
+    std::shared_ptr<std::istream> GetInputStream(const std::string &filename) const override {
+        auto istream = std::make_shared<std::ifstream>(filename, std::ios_base::binary);
+        return istream;
+    }
+};
+
 namespace veb {
 
 MeshFile::MeshFile(const std::string &filePath) {
-    cgltf_data *model = NULL;
-    cgltf_options options = {cgltf_file_type_glb};
-    cgltf_result result = cgltf_parse_file(&options, filePath.c_str(), &model);
+    auto streamReader = std::make_unique<MeshStreamReader>();
+    auto istream = streamReader->GetInputStream(filePath);
 
-    if (result != cgltf_result_success) {
-        cgltf_free(model);
-        return;
-    }
+    Microsoft::glTF::GLBResourceReader reader(std::move(streamReader), std::move(istream));
+    auto gltf = Microsoft::glTF::Deserialize(reader.GetJson());
 
-    result = cgltf_load_buffers(&options, model, NULL);
-    if (result != cgltf_result_success) {
-        cgltf_free(model);
+    if (!gltf.IsExtensionRequired("KHR_draco_mesh_compression"))
         return;
-    }
+
+    if (gltf.meshes.Size() < 1)
+        return;
 
     draco::Decoder decoder;
-    for (uint32_t i = 0; i < model->meshes_count; i++) {
-        const cgltf_mesh &mesh = model->meshes[i];
+    auto mesh = gltf.meshes[0];
 
-        for (uint32_t j = 0; j < mesh.primitives_count; j++) {
-            const cgltf_primitive &primitive = mesh.primitives[j];
-            if (!primitive.has_draco_mesh_compression)
-                continue; // TODO: uncompressed data
+    for (size_t i = 0; i < mesh.primitives.size(); ++i) {
+        auto primitive = mesh.primitives[i];
+        float color[4] = {.5f, .5f, .5f, 1.f};
 
-            float color[4] = {.5f, .5f, .5f, 1.f};
-            if (primitive.material->has_pbr_metallic_roughness) {
-                float *material = primitive.material->pbr_metallic_roughness.base_color_factor;
-                memcpy(&color[0], material, sizeof(color));
-            }
+        if (gltf.materials.Has(primitive.materialId)) {
+            auto material = gltf.materials.Get(primitive.materialId);
+            auto baseColor = material.metallicRoughness.baseColorFactor;
 
-            draco::DecoderBuffer buffer;
-            cgltf_buffer_view *view = primitive.draco_mesh_compression.buffer_view;
-            buffer.Init(static_cast<char *>(view->buffer->data) + view->offset, view->size);
+            color[0] = baseColor.r;
+            color[1] = baseColor.g;
+            color[2] = baseColor.b;
+            color[3] = baseColor.a;
+        }
 
-            auto status = decoder.DecodeMeshFromBuffer(&buffer);
-            if (!status.ok())
-                continue;
+        auto bufferView = gltf.bufferViews[i];
+        auto binary = reader.ReadBinaryData<char>(gltf, bufferView);
 
-            std::unique_ptr<draco::Mesh> decoded = std::move(status).value();
-            MeshAttributes attributes(decoded);
+        draco::DecoderBuffer buffer;
+        buffer.Init(&binary[0], binary.size());
 
-            for (uint32_t k = 0; k < decoded->num_faces(); k++) {
-                auto face = decoded->face(draco::FaceIndex(k));
-                points += face.size();
+        auto status = decoder.DecodeMeshFromBuffer(&buffer);
+        if (!status.ok())
+            continue;
 
-                for (const draco::PointIndex &index : face) {
-                    auto position = attributes.GetValue(draco::GeometryAttribute::Type::POSITION, index);
-                    data.insert(data.end(), position.begin(), position.end());
+        std::unique_ptr<draco::Mesh> decoded = std::move(status).value();
+        MeshAttributes attributes(decoded);
 
-                    auto normal = attributes.GetValue(draco::GeometryAttribute::Type::NORMAL, index);
-                    data.insert(data.end(), normal.begin(), normal.end());
+        for (uint32_t k = 0; k < decoded->num_faces(); k++) {
+            auto face = decoded->face(draco::FaceIndex(k));
+            points += face.size();
 
-                    data.insert(data.end(), std::begin(color), std::end(color));
-                }
+            for (const draco::PointIndex &index : face) {
+                auto position = attributes.GetValue(draco::GeometryAttribute::Type::POSITION, index);
+                data.insert(data.end(), position.begin(), position.end());
+
+                auto normal = attributes.GetValue(draco::GeometryAttribute::Type::NORMAL, index);
+                data.insert(data.end(), normal.begin(), normal.end());
+
+                data.insert(data.end(), std::begin(color), std::end(color));
             }
         }
     }
-
-    cgltf_free(model);
 }
 
 } // namespace veb

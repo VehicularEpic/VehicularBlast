@@ -1,0 +1,5 @@
+set(ENABLE_UNIT_TESTS OFF CACHE BOOL "" FORCE)
+set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(glTF-SDK)
+add_library(gltfsdk ALIAS GLTFSDK)
