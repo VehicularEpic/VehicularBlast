@@ -1,2 +1,64 @@
-set(DRACO_GLTF_BITSTREAM ON CACHE BOOL "" FORCE)
-add_subdirectory(draco)
+set(DRACO_SOURCES
+    draco/src/draco/animation/keyframe_animation_decoder.cc
+    draco/src/draco/animation/keyframe_animation.cc
+    draco/src/draco/attributes/attribute_octahedron_transform.cc
+    draco/src/draco/attributes/attribute_quantization_transform.cc
+    draco/src/draco/attributes/attribute_transform.cc
+    draco/src/draco/attributes/geometry_attribute.cc
+    draco/src/draco/attributes/point_attribute.cc
+    draco/src/draco/compression/attributes/attributes_decoder.cc
+    draco/src/draco/compression/attributes/kd_tree_attributes_decoder.cc
+    draco/src/draco/compression/attributes/sequential_attribute_decoder.cc
+    draco/src/draco/compression/attributes/sequential_attribute_decoders_controller.cc
+    draco/src/draco/compression/attributes/sequential_integer_attribute_decoder.cc
+    draco/src/draco/compression/attributes/sequential_normal_attribute_decoder.cc
+    draco/src/draco/compression/attributes/sequential_quantization_attribute_decoder.cc
+    draco/src/draco/compression/bit_coders/adaptive_rans_bit_decoder.cc
+    draco/src/draco/compression/bit_coders/direct_bit_decoder.cc
+    draco/src/draco/compression/bit_coders/rans_bit_decoder.cc
+    draco/src/draco/compression/bit_coders/symbol_bit_decoder.cc
+    draco/src/draco/compression/decode.cc
+    draco/src/draco/compression/entropy/shannon_entropy.cc
+    draco/src/draco/compression/entropy/symbol_decoding.cc
+    draco/src/draco/compression/mesh/mesh_decoder.cc
+    draco/src/draco/compression/mesh/mesh_edgebreaker_decoder_impl.cc
+    draco/src/draco/compression/mesh/mesh_edgebreaker_decoder.cc
+    draco/src/draco/compression/mesh/mesh_sequential_decoder.cc
+    draco/src/draco/compression/point_cloud/algorithms/dynamic_integer_points_kd_tree_decoder.cc
+    draco/src/draco/compression/point_cloud/algorithms/float_points_tree_decoder.cc
+    draco/src/draco/compression/point_cloud/algorithms/integer_points_kd_tree_decoder.cc
+    draco/src/draco/compression/point_cloud/point_cloud_decoder.cc
+    draco/src/draco/compression/point_cloud/point_cloud_kd_tree_decoder.cc
+    draco/src/draco/compression/point_cloud/point_cloud_sequential_decoder.cc
+    draco/src/draco/core/bit_utils.cc
+    draco/src/draco/core/bounding_box.cc
+    draco/src/draco/core/cycle_timer.cc
+    draco/src/draco/core/data_buffer.cc
+    draco/src/draco/core/decoder_buffer.cc
+    draco/src/draco/core/divide.cc
+    draco/src/draco/core/draco_types.cc
+    draco/src/draco/core/hash_utils.cc
+    draco/src/draco/core/options.cc
+    draco/src/draco/core/quantization_utils.cc
+    draco/src/draco/mesh/corner_table.cc
+    draco/src/draco/mesh/mesh_are_equivalent.cc
+    draco/src/draco/mesh/mesh_attribute_corner_table.cc
+    draco/src/draco/mesh/mesh_cleanup.cc
+    draco/src/draco/mesh/mesh_misc_functions.cc
+    draco/src/draco/mesh/mesh_stripifier.cc
+    draco/src/draco/mesh/mesh.cc
+    draco/src/draco/mesh/triangle_soup_mesh_builder.cc
+    draco/src/draco/metadata/geometry_metadata.cc
+    draco/src/draco/metadata/metadata_decoder.cc
+    draco/src/draco/metadata/metadata.cc
+    draco/src/draco/point_cloud/point_cloud_builder.cc
+    draco/src/draco/point_cloud/point_cloud.cc
+)
+
+set(DRACO_INCLUDE_DIRECTORIES
+    "include"
+    "draco/src"
+)
+
+add_library(draco STATIC ${DRACO_SOURCES})
+target_include_directories(draco PUBLIC ${DRACO_INCLUDE_DIRECTORIES})
