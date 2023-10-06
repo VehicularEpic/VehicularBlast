@@ -22,3 +22,7 @@
 	path = thirdparty/gltfsdk/glTF-SDK
 	url = https://github.com/microsoft/glTF-SDK.git
 	branch = r1.9.6.0
+[submodule "thirdparty/bullet/bullet3"]
+	path = thirdparty/bullet/bullet3
+	url = https://github.com/bulletphysics/bullet3.git
+	branch = 3.25
