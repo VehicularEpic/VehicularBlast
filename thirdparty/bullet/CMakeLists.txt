@@ -9,6 +9,7 @@ set(USE_MSVC_RUNTIME_LIBRARY_DLL ON CACHE BOOL "Use MSVC dynamic linking for Bul
 add_subdirectory(bullet3)
 
 set(BULLET_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bullet3/src)
-target_include_directories(BulletCollision PUBLIC ${BULLET_INCLUDE_DIR})
-target_include_directories(BulletDynamics PUBLIC ${BULLET_INCLUDE_DIR})
-target_include_directories(LinearMath PUBLIC ${BULLET_INCLUDE_DIR})
+
+add_library(Bullet INTERFACE)
+target_include_directories(Bullet INTERFACE ${BULLET_INCLUDE_DIR})
+target_link_libraries(Bullet INTERFACE BulletCollision BulletDynamics LinearMath)

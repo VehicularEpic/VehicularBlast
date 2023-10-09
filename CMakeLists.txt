@@ -34,4 +34,4 @@ add_executable(VehicularBlast src/main.cpp ${VEHICULAR_BLAST_SOURCES})
 set_target_properties(VehicularBlast PROPERTIES C_STANDARD 11 CXX_STANDARD 11)
 
 target_include_directories(VehicularBlast PRIVATE include)
-target_link_libraries(VehicularBlast glm glad glfw gltfsdk draco pbtools BulletCollision BulletDynamics LinearMath)
+target_link_libraries(VehicularBlast glm glad glfw gltfsdk draco pbtools Bullet)
