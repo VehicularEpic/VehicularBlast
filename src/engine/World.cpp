@@ -14,11 +14,8 @@ void World::Render() const {
     auto &skybox = Rect::GetInstance();
     skybox.Render();
 
-    auto &entityRenderer = game.GetEntityRenderer();
-    for (auto &entity : entities) {
-        entityRenderer.SetModelMatrix(entity.GetModelMatrix());
-        entity.Render();
-    }
+    auto &renderSystem = game.GetRenderSystem();
+    renderSystem.Render(entities);
 }
 
 } // namespace veb

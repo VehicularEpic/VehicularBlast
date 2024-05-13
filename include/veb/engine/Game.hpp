@@ -1,12 +1,12 @@
 #pragma once
 
-#include "veb/engine/EntityRenderer.hpp"
 #include "veb/engine/Map.hpp"
 #include "veb/engine/SkyboxRenderer.hpp"
 #include "veb/engine/State.hpp"
 #include "veb/gui/Window.hpp"
 #include "veb/io/Keyboard.hpp"
 #include "veb/io/MeshBank.hpp"
+#include "veb/render/RenderSystem.hpp"
 
 #include <memory>
 #include <stack>
@@ -19,7 +19,7 @@ private:
     Window window;
     Keyboard keyboard;
     MeshBank meshBank;
-    EntityRenderer entityRenderer;
+    RenderSystem renderSystem;
     SkyboxRenderer skyboxRenderer;
 
     std::vector<Map> maps;
@@ -41,8 +41,8 @@ public:
         return maps;
     }
 
-    const EntityRenderer &GetEntityRenderer() const {
-        return entityRenderer;
+    const RenderSystem &GetRenderSystem() const {
+        return renderSystem;
     }
 
     const SkyboxRenderer &GetSkyboxRenderer() const {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "veb/engine/Entity.hpp"
-#include "veb/engine/EntityRenderer.hpp"
 #include "veb/engine/Map.hpp"
 #include "veb/engine/Game.hpp"
 #include "veb/engine/State.hpp"

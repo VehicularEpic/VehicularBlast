@@ -3,7 +3,6 @@ project(VehicularBlast)
 
 set(VEHICULAR_BLAST_SOURCES
     src/engine/Entity.cpp
-    src/engine/EntityRenderer.cpp
     src/engine/Game.cpp
     src/engine/MainMenu.cpp
     src/engine/Map.cpp
@@ -20,6 +19,7 @@ set(VEHICULAR_BLAST_SOURCES
     src/io/MeshBank.cpp
     src/io/MeshFile.cpp
     src/pbf/map_pbf.c
+    src/render/RenderSystem.cpp
 )
 
 add_subdirectory(thirdparty/bullet)

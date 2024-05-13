@@ -51,19 +51,12 @@ Map::Map(const std::string &filePath, const MeshBank &bank) {
         objects.push_back(std::string(map->objects.items_pp[i]));
 
     auto CreateEntity = [&](const map_entity_t &e) {
-        veb::Entity entity(bank.GetMesh(objects.at(e.i)));
+        veb::Entity entity;
+        const Mesh &mesh = bank.GetMesh(objects.at(e.i));
 
-        entity.SetPosition(
-                e.position.items_p[0], // x
-                e.position.items_p[1], // y
-                e.position.items_p[2]  // z
-        );
-
-        entity.SetRotation(
-                e.rotation.items_p[0], // x
-                e.rotation.items_p[1], // y
-                e.rotation.items_p[2]  // z
-        );
+        entity.Add(ComponentMesh{mesh});
+        entity.Add(ComponentPosition{e.position.items_p[0], e.position.items_p[1], e.position.items_p[2]});
+        entity.Add(ComponentRotation{e.rotation.items_p[0], e.rotation.items_p[1], e.rotation.items_p[2]});
 
         return entity;
     };

@@ -1,80 +1,37 @@
 #pragma once
 
-#include "veb/gfx/Mesh.hpp"
+#include "veb/component/ComponentMesh.hpp"
+#include "veb/component/ComponentPosition.hpp"
+#include "veb/component/ComponentRotation.hpp"
 
-#include <glm/mat4x4.hpp>
+#include <map>
+#include <memory>
+#include <typeindex>
 
 namespace veb {
 
 class Entity {
 private:
-    const Mesh &mesh;
-
-    float x = 0.f;
-    float y = 0.f;
-    float z = 0.f;
-
-    float pitch = 0.f;
-    float yaw = 0.f;
-    float roll = 0.f;
+    std::map<std::type_index, std::shared_ptr<void>> components;
 
 public:
-    Entity(const Mesh &mesh) : mesh(mesh) {}
-    ~Entity() = default;
+    Entity() = default;
+    virtual ~Entity() = default;
 
-    void Render() const {
-        mesh.Render();
+    template<typename T>
+    void Add(T component) {
+        components.insert(std::make_pair<std::type_index, std::shared_ptr<T>>(typeid(T), std::make_shared<T>(component)));
     }
 
-    void Move(float px, float py, float pz) {
-        x += px;
-        y += py;
-        z += pz;
-    }
+    template<typename T>
+    std::shared_ptr<T> Get() const {
+        auto component = components.find(typeid(T));
 
-    void SetPosition(float px, float py, float pz) {
-        x = px;
-        y = py;
-        z = pz;
-    }
+        if (components.end() == component)
+            return nullptr;
 
-    void SetX(float px) {
-        x = px;
+        return std::static_pointer_cast<T>(component->second);
     }
-
-    void SetY(float py) {
-        y = py;
-    }
-
-    void SetZ(float pz) {
-        z = pz;
-    }
-
-    void Rotate(float x, float y, float z) {
-        pitch += x;
-        yaw += y;
-        roll += z;
-    }
-
-    void SetRotation(float x, float y, float z) {
-        pitch = x;
-        yaw = y;
-        roll = z;
-    }
-
-    void SetPitch(float x) {
-        pitch = x;
-    }
-
-    void SetYaw(float y) {
-        yaw = y;
-    }
-
-    void SetRoll(float z) {
-        roll = z;
-    }
-
-    glm::mat4 GetModelMatrix() const;
 };
 
 } // namespace veb
