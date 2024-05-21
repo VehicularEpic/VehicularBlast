@@ -1,5 +1,9 @@
 #include "veb/render/RenderSystem.hpp"
 
+#include "veb/component/Components.hpp"
+#include "veb/component/ComponentMesh.hpp"
+#include "veb/component/ComponentPosition.hpp"
+#include "veb/component/ComponentRotation.hpp"
 #include "veb/gfx/FragmentShader.hpp"
 #include "veb/gfx/VertexShader.hpp"
 
@@ -58,14 +62,14 @@ void main(void) {
 
 namespace veb {
 
-static glm::mat4 CreateEntityMatrix(std::shared_ptr<ComponentPosition> position, std::shared_ptr<ComponentRotation> rotation) {
+static glm::mat4 CreateEntityMatrix(ComponentPosition &position, ComponentRotation &rotation) {
     glm::mat4 matrix = glm::identity<glm::mat4>();
-    matrix = glm::translate(matrix, glm::vec3(position->x, position->y, -position->z));
+    matrix = glm::translate(matrix, glm::vec3(position.x, position.y, -position.z));
 
     // https://en.wikipedia.org/wiki/Aircraft_principal_axes
-    matrix = matrix * glm::toMat4(glm::quat(glm::cos(rotation->pitch / 2.f), glm::sin(rotation->pitch / 2.f), 0.f, 0.f));
-    matrix = matrix * glm::toMat4(glm::quat(glm::cos(rotation->yaw / 2.f), 0.f, -glm::sin(rotation->yaw / 2.f), 0.f));
-    matrix = matrix * glm::toMat4(glm::quat(glm::cos(rotation->roll / 2.f), 0.f, 0.f, glm::sin(rotation->roll / 2.f)));
+    matrix = matrix * glm::toMat4(glm::quat(glm::cos(rotation.pitch / 2.f), glm::sin(rotation.pitch / 2.f), 0.f, 0.f));
+    matrix = matrix * glm::toMat4(glm::quat(glm::cos(rotation.yaw / 2.f), 0.f, -glm::sin(rotation.yaw / 2.f), 0.f));
+    matrix = matrix * glm::toMat4(glm::quat(glm::cos(rotation.roll / 2.f), 0.f, 0.f, glm::sin(rotation.roll / 2.f)));
 
     return matrix;
 }
@@ -84,15 +88,11 @@ RenderSystem::RenderSystem() {
 }
 
 void RenderSystem::Render(const Entity &entity) const {
-    std::shared_ptr<ComponentMesh> mesh;
-    std::shared_ptr<ComponentPosition> position;
-    std::shared_ptr<ComponentRotation> rotation;
-
-    if (!(mesh = entity.Get<ComponentMesh>()) || !(position = entity.Get<ComponentPosition>()) || !(rotation = entity.Get<ComponentRotation>()))
+    if (!Components<ComponentMesh>::Has(entity) || !Components<ComponentPosition>::Has(entity) || !Components<ComponentRotation>::Has(entity))
         return;
 
-    shader.Matrix4x4f("model", CreateEntityMatrix(position, rotation));
-    mesh->mesh.Render();
+    shader.Matrix4x4f("model", CreateEntityMatrix(Components<ComponentPosition>::Get(entity), Components<ComponentRotation>::Get(entity)));
+    Components<ComponentMesh>::Get(entity).mesh.Render();
 }
 
 void RenderSystem::Render(const std::vector<Entity> &entities) const {

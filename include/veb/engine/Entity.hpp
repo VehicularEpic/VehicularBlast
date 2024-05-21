@@ -1,36 +1,20 @@
 #pragma once
 
-#include "veb/component/ComponentMesh.hpp"
-#include "veb/component/ComponentPosition.hpp"
-#include "veb/component/ComponentRotation.hpp"
-
-#include <map>
-#include <memory>
-#include <typeindex>
+#include <cstdint>
 
 namespace veb {
 
-class Entity {
-private:
-    std::map<std::type_index, std::shared_ptr<void>> components;
-
+class Entity final {
 public:
-    Entity() = default;
-    virtual ~Entity() = default;
+    const uint16_t id;
 
-    template<typename T>
-    void Add(T component) {
-        components.insert(std::make_pair<std::type_index, std::shared_ptr<T>>(typeid(T), std::make_shared<T>(component)));
-    }
+    Entity();
+    ~Entity();
 
-    template<typename T>
-    std::shared_ptr<T> Get() const {
-        auto component = components.find(typeid(T));
+    Entity(const Entity &entity);
 
-        if (components.end() == component)
-            return nullptr;
-
-        return std::static_pointer_cast<T>(component->second);
+    operator uint16_t() const {
+        return id;
     }
 };
 

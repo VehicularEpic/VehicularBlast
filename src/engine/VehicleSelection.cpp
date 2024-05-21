@@ -1,5 +1,9 @@
 #include "veb/engine/VehicleSelection.hpp"
 
+#include "veb/component/Components.hpp"
+#include "veb/component/ComponentMesh.hpp"
+#include "veb/component/ComponentPosition.hpp"
+#include "veb/component/ComponentRotation.hpp"
 #include "veb/engine/MapSelection.hpp"
 
 #include <glm/ext/matrix_transform.hpp>
@@ -10,9 +14,9 @@ namespace state {
 VehicleSelection::VehicleSelection(Game &g) : game(g) {
     view = glm::lookAt(glm::vec3(0.f, 4.f, -15.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
 
-    entity.Add(ComponentMesh{g.GetMeshBank().GetMesh("destroy")});
-    entity.Add(ComponentPosition{});
-    entity.Add(ComponentRotation{});
+    Components<ComponentMesh>::Put(entity, ComponentMesh{g.GetMeshBank().GetMesh("destroy")});
+    Components<ComponentPosition>::Put(entity, ComponentPosition{});
+    Components<ComponentRotation>::Put(entity, ComponentRotation{});
 
     const RenderSystem &renderer = g.GetRenderSystem();
     renderer.SetViewMatrix(view);
@@ -25,12 +29,12 @@ void VehicleSelection::Run(double delta) {
 
     if (keyboard.Poll(VK_ENTER)) {
         auto state = game.PopState();
-        game.PushState(std::make_unique<MapSelection>(game, entity));
+        game.PushState(std::make_unique<MapSelection>(game));
         return;
     }
 
-    auto rotation = entity.Get<ComponentRotation>();
-    rotation->yaw += delta;
+    auto &rotation = Components<ComponentRotation>::Get(entity);
+    rotation.yaw += delta;
 
     const RenderSystem &renderer = game.GetRenderSystem();
     renderer.Render(entity);

@@ -14,7 +14,6 @@ namespace state {
 class MapSelection : public virtual State {
 private:
     Game &game;
-    Entity player;
     std::vector<Map>::const_iterator map_it;
 
     World world;
@@ -23,7 +22,7 @@ private:
     void UpdateMap();
 
 public:
-    MapSelection(Game &game, Entity player);
+    MapSelection(Game &game);
     ~MapSelection() = default;
 
     void Run(double delta);

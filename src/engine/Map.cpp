@@ -7,9 +7,17 @@
 
 #define ONE_MB_MEMORY sizeof(uint8_t) * 1024 * 1024
 
+static veb::MapObject CreateObject(struct map_t *map, const map_entity_t &e) {
+    return veb::MapObject{
+            map->objects.items_pp[e.i],
+            glm::vec3(e.position.items_p[0], e.position.items_p[1], e.position.items_p[2]),
+            glm::vec3(e.rotation.items_p[0], e.rotation.items_p[1], e.rotation.items_p[2]),
+    };
+}
+
 namespace veb {
 
-Map::Map(const std::string &filePath, const MeshBank &bank) {
+Map::Map(const std::string &filePath) {
     FILE *file = fopen(filePath.c_str(), "rb");
     fseek(file, 0, SEEK_END);
 
@@ -46,29 +54,14 @@ Map::Map(const std::string &filePath, const MeshBank &bank) {
     ground.g = uGround[1] / 255.f;
     ground.b = uGround[2] / 255.f;
 
-    std::vector<std::string> objects;
-    for (int i = 0; i < map->objects.length; i++)
-        objects.push_back(std::string(map->objects.items_pp[i]));
-
-    auto CreateEntity = [&](const map_entity_t &e) {
-        veb::Entity entity;
-        const Mesh &mesh = bank.GetMesh(objects.at(e.i));
-
-        entity.Add(ComponentMesh{mesh});
-        entity.Add(ComponentPosition{e.position.items_p[0], e.position.items_p[1], e.position.items_p[2]});
-        entity.Add(ComponentRotation{e.rotation.items_p[0], e.rotation.items_p[1], e.rotation.items_p[2]});
-
-        return entity;
-    };
-
     for (int i = 0; i < map->set.length; i++)
-        entities.push_back(CreateEntity(map->set.items_p[i]));
+        objects.push_back(CreateObject(map, map->set.items_p[i]));
 
     for (int i = 0; i < map->fix.length; i++)
-        entities.push_back(CreateEntity(map->fix.items_p[i]));
+        objects.push_back(CreateObject(map, map->fix.items_p[i]));
 
     for (int i = 0; i < map->chk.length; i++)
-        entities.push_back(CreateEntity(map->chk.items_p[i]));
+        objects.push_back(CreateObject(map, map->chk.items_p[i]));
 
     free(workspace);
 }

@@ -1,11 +1,16 @@
 #include "veb/engine/MapSelection.hpp"
 
+#include "veb/component/Components.hpp"
+#include "veb/component/ComponentMesh.hpp"
+#include "veb/component/ComponentPosition.hpp"
+#include "veb/component/ComponentRotation.hpp"
+
 #include <glm/ext/matrix_transform.hpp>
 
 namespace veb {
 namespace state {
 
-MapSelection::MapSelection(Game &g, Entity player) : game(g), player(player), map_it(g.GetMaps().begin()), world(g) {
+MapSelection::MapSelection(Game &g) : game(g), map_it(g.GetMaps().begin()), world(g) {
     view = glm::lookAt(glm::vec3(0.f, 20.f, -100.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
     UpdateMap();
 }
@@ -22,8 +27,14 @@ void MapSelection::UpdateMap() {
 
     world.Clear();
 
-    for (veb::Entity entity : map_it->GetEntities())
+    for (const auto &object : map_it->GetObjects()) {
+        Entity entity;
+        Components<ComponentMesh>::Put(entity, ComponentMesh{game.GetMeshBank().GetMesh(object.name)});
+        Components<ComponentPosition>::Put(entity, ComponentPosition{object.position.x, object.position.y, object.position.z});
+        Components<ComponentRotation>::Put(entity, ComponentRotation{object.rotation.x, object.rotation.y, object.rotation.z});
+
         world.AddEntity(entity);
+    }
 }
 
 void MapSelection::Run(double delta) {

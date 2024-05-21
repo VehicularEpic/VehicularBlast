@@ -3,6 +3,8 @@
 #include "veb/gfx/ShaderProgram.hpp"
 #include "veb/engine/Entity.hpp"
 
+#include <vector>
+
 namespace veb {
 
 class RenderSystem {

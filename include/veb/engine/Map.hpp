@@ -1,13 +1,17 @@
 #pragma once
 
-#include "veb/engine/Entity.hpp"
-#include "veb/io/MeshBank.hpp"
-
 #include <string>
+#include <vector>
 
 #include <glm/vec3.hpp>
 
 namespace veb {
+
+struct MapObject {
+    std::string name;
+    glm::vec3 position;
+    glm::vec3 rotation;
+};
 
 class Map {
 private:
@@ -16,10 +20,10 @@ private:
     glm::vec3 sky = {0.f, 0.f, 0.f};
     glm::vec3 ground = {.5f, .5f, .5f};
 
-    std::vector<Entity> entities;
+    std::vector<MapObject> objects;
 
 public:
-    Map(const std::string &filePath, const MeshBank &bank);
+    Map(const std::string &filePath);
     ~Map() = default;
 
     std::string GetName() const {
@@ -38,8 +42,8 @@ public:
         return ground;
     }
 
-    std::vector<Entity> GetEntities() const {
-        return entities;
+    std::vector<MapObject> GetObjects() const {
+        return objects;
     }
 };
 
