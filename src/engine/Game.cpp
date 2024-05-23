@@ -1,5 +1,6 @@
 #include "veb/engine/Game.hpp"
 
+#include "veb/engine/StateManager.hpp"
 #include "veb/gfx/FragmentShader.hpp"
 #include "veb/gfx/VertexShader.hpp"
 
@@ -62,11 +63,7 @@ void Game::Start() const {
         before = now;
 
         window.Clear();
-        if (!states.empty()) {
-            auto &state = states.top();
-            state->Run(delta);
-        }
-
+        StateManager::Update(delta);
         window.Update();
     }
 }

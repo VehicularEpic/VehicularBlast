@@ -1,12 +1,11 @@
 #pragma once
 
 #include "veb/engine/Game.hpp"
-#include "veb/engine/State.hpp"
 
 namespace veb {
 namespace state {
 
-class MainMenu : public virtual State {
+class MainMenu {
 private:
     Game &game;
 

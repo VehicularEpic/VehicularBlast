@@ -3,7 +3,6 @@
 #include "veb/engine/Entity.hpp"
 #include "veb/engine/Map.hpp"
 #include "veb/engine/Game.hpp"
-#include "veb/engine/State.hpp"
 #include "veb/engine/World.hpp"
 
 #include <glm/mat4x4.hpp>
@@ -11,7 +10,7 @@
 namespace veb {
 namespace state {
 
-class MapSelection : public virtual State {
+class MapSelection {
 private:
     Game &game;
     std::vector<Map>::const_iterator map_it;

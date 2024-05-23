@@ -5,6 +5,7 @@
 #include "veb/component/ComponentPosition.hpp"
 #include "veb/component/ComponentRotation.hpp"
 #include "veb/engine/MapSelection.hpp"
+#include "veb/engine/StateManager.hpp"
 
 #include <glm/ext/matrix_transform.hpp>
 
@@ -28,8 +29,7 @@ void VehicleSelection::Run(double delta) {
     auto &keyboard = game.GetKeyboard();
 
     if (keyboard.Poll(VK_ENTER)) {
-        auto state = game.PopState();
-        game.PushState(std::make_unique<MapSelection>(game));
+        StateManager::Replace<MapSelection>(game);
         return;
     }
 
