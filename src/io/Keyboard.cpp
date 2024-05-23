@@ -14,7 +14,7 @@ void Keyboard::KeyCallback(Key key, bool down) {
     keys[key] = down;
 }
 
-bool Keyboard::IsPressed(Key key) {
+bool Keyboard::IsPressed(Key key) const {
     auto state = keys.find(key);
     return state != keys.end() && state->second;
 }

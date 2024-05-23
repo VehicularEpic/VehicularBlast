@@ -86,7 +86,7 @@ public:
     Keyboard(Window &window);
     ~Keyboard() = default;
 
-    bool IsPressed(Key key);
+    bool IsPressed(Key key) const;
     bool Poll(Key key);
 };
 
