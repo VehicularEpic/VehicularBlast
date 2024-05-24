@@ -8,6 +8,7 @@ set(VEHICULAR_BLAST_SOURCES
     src/engine/Map.cpp
     src/engine/MapSelection.cpp
     src/engine/SkyboxRenderer.cpp
+    src/engine/StateManager.cpp
     src/engine/VehicleSelection.cpp
     src/engine/World.cpp
     src/gfx/Mesh.cpp
