@@ -1,22 +1,24 @@
 #pragma once
 
 #include "veb/engine/Entity.hpp"
-#include "veb/engine/Game.hpp"
 
+#include <functional>
 #include <vector>
 
 namespace veb {
 
 class World {
 private:
-    const Game &game;
-    std::vector<Entity> entities;
+    std::vector<Entity> entities{};
 
 public:
-    World(const Game &game);
+    World() = default;
     ~World() = default;
 
-    void Render() const;
+    void Process(std::function<void(const Entity &)> process) const {
+        for (const Entity &entity : entities)
+            process(entity);
+    }
 
     void AddEntity(Entity entity) {
         entities.push_back(entity);

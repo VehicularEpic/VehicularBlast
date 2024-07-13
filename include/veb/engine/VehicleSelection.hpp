@@ -2,8 +2,8 @@
 
 #include "veb/engine/Entity.hpp"
 #include "veb/engine/Game.hpp"
-
-#include <glm/mat4x4.hpp>
+#include "veb/engine/World.hpp"
+#include "veb/render/WorldRenderer.hpp"
 
 namespace veb {
 namespace state {
@@ -12,8 +12,10 @@ class VehicleSelection {
 private:
     Game &game;
     Entity entity;
+    Camera camera;
 
-    glm::mat4 view;
+    World world;
+    WorldRenderer renderer;
 
 public:
     VehicleSelection(Game &game);

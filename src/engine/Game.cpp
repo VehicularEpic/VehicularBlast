@@ -1,8 +1,10 @@
 #include "veb/engine/Game.hpp"
 
 #include "veb/engine/StateManager.hpp"
-#include "veb/gfx/FragmentShader.hpp"
-#include "veb/gfx/VertexShader.hpp"
+#include "veb/registry/Registry.hpp"
+#include "veb/render/WorldRenderer.hpp"
+#include "veb/shaders/EntityShader.hpp"
+#include "veb/shaders/SkyShader.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -27,6 +29,10 @@ static constexpr const char *vehicles[] = {
 namespace veb {
 
 Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/models") {
+    auto &registry = Registry<ShaderProgram>::Fetch();
+    registry.Put("entity", EntityShader());
+    registry.Put("sky", SkyShader());
+
     glEnable(GL_CULL_FACE);
 
     glEnable(GL_DEPTH_TEST);
@@ -43,11 +49,11 @@ Game::Game() : window("Vehicular Blast"), keyboard(window), meshBank("assets/mod
         maps.push_back(Map(mapFile));
     }
 
-    auto SetPerspective = [&](int width, int height) {
+    auto SetPerspective = [](int width, int height) {
         glm::mat4 projection = glm::perspective(70.f, width / (float) height, 0.1f, 10000.f);
 
-        renderSystem.SetProjectionMatrix(projection);
-        skyboxRenderer.SetProjectionMatrix(projection);
+        WorldRenderer renderer;
+        renderer.SetProjectionMatrix(projection);
     };
 
     SetPerspective(window.GetWidth(), window.GetHeight());

@@ -1,11 +1,9 @@
-#include "veb/engine/SkyboxRenderer.hpp"
+#include "veb/shaders/SkyShader.hpp"
 
 #include "veb/gfx/FragmentShader.hpp"
 #include "veb/gfx/VertexShader.hpp"
 
-#include <glm/ext/matrix_transform.hpp>
-
-static constexpr const char *vertex_shader_source = R"(
+#define VERTEX_SHADER_SOURCE R""(
 #version 330 core
 precision mediump float;
 
@@ -28,9 +26,9 @@ void main(void) {
 
     gl_Position = vec4(a_position, 1.f, 1.f);
 }
-)";
+)""
 
-static constexpr const char *fragment_shader_source = R"(
+#define FRAGMENT_SHADER_SOURCE R""(
 #version 330 core
 precision mediump float;
 
@@ -54,17 +52,13 @@ void main(void) {
 
     FragColor = vec4(ambient * skyColor, 1.f);
 }
-)";
+)""
 
 namespace veb {
 
-SkyboxRenderer::SkyboxRenderer() {
-    VertexShader vertexShader(vertex_shader_source);
-    FragmentShader fragmentShader(fragment_shader_source);
-
-    Attach(vertexShader);
-    Attach(fragmentShader);
-
+SkyShader::SkyShader() {
+    Attach(VertexShader(VERTEX_SHADER_SOURCE));
+    Attach(FragmentShader(FRAGMENT_SHADER_SOURCE));
     Link();
 }
 

@@ -5,33 +5,29 @@
 #include "veb/component/ComponentPosition.hpp"
 #include "veb/component/ComponentRotation.hpp"
 
-#include <glm/ext/matrix_transform.hpp>
-
 namespace veb {
 namespace state {
 
-MapSelection::MapSelection(Game &g) : game(g), map_it(g.GetMaps().begin()), world(g) {
-    view = glm::lookAt(glm::vec3(0.f, 20.f, -100.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
+MapSelection::MapSelection(Game &g) : game(g), map_it(g.GetMaps().begin()) {
+    camera.SetPosition(0.f, 30.f, 100.f);
+    camera.SetTarget(0.f, 0.f, 0.f);
+    renderer.SetCamera(camera);
+
     UpdateMap();
 }
 
 void MapSelection::UpdateMap() {
-    auto &renderSystem = game.GetRenderSystem();
-    renderSystem.SetAmbientColor(map_it->GetAmbientColor());
-    renderSystem.SetLightPosition(glm::vec3(0.f, 100.f, 40.f));
-
-    auto &skyboxRenderer = game.GetSkyboxRenderer();
-    skyboxRenderer.SetAmbientColor(map_it->GetAmbientColor());
-    skyboxRenderer.SetSkyColor(map_it->GetSkyColor());
-    skyboxRenderer.SetGroundColor(map_it->GetGroundColor());
+    renderer.SetAmbientLight({0.f, 100.f, 40.f}, map_it->GetAmbientColor());
+    renderer.SetSkyColor(map_it->GetSkyColor());
+    renderer.SetGroundColor(map_it->GetGroundColor());
 
     world.Clear();
 
     for (const auto &object : map_it->GetObjects()) {
         Entity entity;
-        Components<ComponentMesh>::Put(entity, ComponentMesh{game.GetMeshBank().GetMesh(object.name)});
-        Components<ComponentPosition>::Put(entity, ComponentPosition{object.position.x, object.position.y, object.position.z});
-        Components<ComponentRotation>::Put(entity, ComponentRotation{object.rotation.x, object.rotation.y, object.rotation.z});
+        Components<ComponentMesh>::Put(entity, {game.GetMeshBank().GetMesh(object.name)});
+        Components<ComponentPosition>::Put(entity, {object.position.x, object.position.y, object.position.z});
+        Components<ComponentRotation>::Put(entity, {object.rotation.x, object.rotation.y, object.rotation.z});
 
         world.AddEntity(entity);
     }
@@ -58,15 +54,10 @@ void MapSelection::Run(double delta) {
         UpdateMap();
     }
 
-    view = glm::rotate(view, (float) delta, glm::vec3(0.f, -1.f, 0.f));
+    camera.Rotate(0.f, delta, 0.f);
 
-    auto &renderSystem = game.GetRenderSystem();
-    renderSystem.SetViewMatrix(view);
-
-    auto &skyboxRenderer = game.GetSkyboxRenderer();
-    skyboxRenderer.SetViewMatrix(view);
-
-    world.Render();
+    renderer.SetCamera(camera);
+    renderer.Render(world);
 }
 
 } // namespace state

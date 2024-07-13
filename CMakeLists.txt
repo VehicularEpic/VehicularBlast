@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.0)
 project(VehicularBlast)
 
 set(VEHICULAR_BLAST_SOURCES
+    src/engine/Camera.cpp
     src/engine/Entity.cpp
     src/engine/Game.cpp
     src/engine/MainMenu.cpp
     src/engine/Map.cpp
     src/engine/MapSelection.cpp
-    src/engine/SkyboxRenderer.cpp
     src/engine/StateManager.cpp
     src/engine/VehicleSelection.cpp
     src/engine/World.cpp
@@ -20,7 +20,9 @@ set(VEHICULAR_BLAST_SOURCES
     src/io/MeshBank.cpp
     src/io/MeshFile.cpp
     src/pbf/map_pbf.c
-    src/render/RenderSystem.cpp
+    src/render/WorldRenderer.cpp
+    src/shaders/EntityShader.cpp
+    src/shaders/SkyShader.cpp
 )
 
 add_subdirectory(thirdparty/bullet)

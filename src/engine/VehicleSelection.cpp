@@ -7,22 +7,20 @@
 #include "veb/engine/MapSelection.hpp"
 #include "veb/engine/StateManager.hpp"
 
-#include <glm/ext/matrix_transform.hpp>
-
 namespace veb {
 namespace state {
 
 VehicleSelection::VehicleSelection(Game &g) : game(g) {
-    view = glm::lookAt(glm::vec3(0.f, 4.f, -15.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 1.f));
+    camera.SetPosition(0.f, 4.f, -15.f);
+    camera.SetTarget(0.f, 0.f, 0.f);
 
-    Components<ComponentMesh>::Put(entity, ComponentMesh{g.GetMeshBank().GetMesh("destroy")});
-    Components<ComponentPosition>::Put(entity, ComponentPosition{});
-    Components<ComponentRotation>::Put(entity, ComponentRotation{});
+    renderer.SetCamera(camera);
+    renderer.SetAmbientLight({0.f, 100.f, 0.f}, {1.f, 1.f, 1.f});
 
-    const RenderSystem &renderer = g.GetRenderSystem();
-    renderer.SetViewMatrix(view);
-    renderer.SetAmbientColor(glm::vec3(1.f, 1.f, 1.f));
-    renderer.SetLightPosition(glm::vec3(0.f, 100.f, 0.f));
+    Components<ComponentMesh>::Put(entity, {g.GetMeshBank().GetMesh("destroy")});
+    Components<ComponentPosition>::Put(entity, {});
+    Components<ComponentRotation>::Put(entity, {});
+    world.AddEntity(entity);
 }
 
 void VehicleSelection::Run(double delta) {
@@ -36,8 +34,7 @@ void VehicleSelection::Run(double delta) {
     auto &rotation = Components<ComponentRotation>::Get(entity);
     rotation.yaw += delta;
 
-    const RenderSystem &renderer = game.GetRenderSystem();
-    renderer.Render(entity);
+    renderer.Render(world);
 }
 
 } // namespace state
