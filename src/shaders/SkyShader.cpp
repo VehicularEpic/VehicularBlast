@@ -41,16 +41,21 @@ uniform vec3 ambient;
 
 uniform vec3 skyColor;
 uniform vec3 groundColor;
+uniform vec3 fadeColor = vec3(1.f);
+
+vec3 gradient(vec3 color, float y, float edge) {  
+    return mix(color, fadeColor, smoothstep(0.f, edge, y));
+}
 
 void main(void) {
     float t = -np.y / (fp.y - np.y);
 
     if (t > 0) {
-        FragColor = vec4(ambient * groundColor, 1.f);
+        FragColor = vec4(gradient(ambient * groundColor, t, 0.4f), 1.f);
         return;
     }
 
-    FragColor = vec4(ambient * skyColor, 1.f);
+    FragColor = vec4(gradient(ambient * skyColor, t, -0.08f), 1.f);
 }
 )""
 
